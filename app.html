@@ -18,37 +18,36 @@
   </header>
 
   <!-- Tabs -->
-<div class="flex justify-center mt-4 gap-4">
-  <button id="tab-todo"
-    onclick="switchTab('todo')"
-    class="px-4 py-2 rounded font-medium transition transform duration-200 bg-white text-black hover:bg-gray-200">
-    Todo (<span id="countTodo">0</span>)
-  </button>
+  <div class="flex justify-center mt-4 gap-4">
+    <button id="tab-todo"
+      onclick="switchTab('todo')"
+      class="px-4 py-2 rounded font-medium transition transform duration-200 bg-white text-black hover:bg-gray-200">
+      Todo (<span id="countTodo">0</span>)
+    </button>
 
-  <button id="tab-completed"
-    onclick="switchTab('completed')"
-    class="px-4 py-2 rounded font-medium transition transform duration-200 bg-white text-black hover:bg-gray-200">
-    Completed (<span id="countCompleted">0</span>)
-  </button>
+    <button id="tab-completed"
+      onclick="switchTab('completed')"
+      class="px-4 py-2 rounded font-medium transition transform duration-200 bg-white text-black hover:bg-gray-200">
+      Completed (<span id="countCompleted">0</span>)
+    </button>
 
-  <button id="tab-archived"
-    onclick="switchTab('archived')"
-    class="px-4 py-2 rounded font-medium transition transform duration-200 bg-white text-black hover:bg-gray-200">
-    Archived (<span id="countArchived">0</span>)
-  </button>
-</div>
-
-<!-- Progress Bar -->
-<div class="max-w-xl mx-auto mt-4 px-4">
-  <div class="flex justify-between mb-1 text-sm text-gray-300">
-    <span>Progress</span>
-    <span id="progressPercent">0%</span>
+    <button id="tab-archived"
+      onclick="switchTab('archived')"
+      class="px-4 py-2 rounded font-medium transition transform duration-200 bg-white text-black hover:bg-gray-200">
+      Archived (<span id="countArchived">0</span>)
+    </button>
   </div>
-  <div class="w-full bg-gray-700 rounded-full h-3">
-    <div id="progressBar" class="bg-green-500 h-3 rounded-full transition-all duration-300" style="width: 0%;"></div>
-  </div>
-</div>
 
+  <!-- Progress Bar -->
+  <div class="max-w-xl mx-auto mt-4 px-4">
+    <div class="flex justify-between mb-1 text-sm text-gray-300">
+      <span>Progress</span>
+      <span id="progressPercent">0%</span>
+    </div>
+    <div class="w-full bg-gray-700 rounded-full h-3">
+      <div id="progressBar" class="bg-green-500 h-3 rounded-full transition-all duration-300" style="width: 0%;"></div>
+    </div>
+  </div>
 
   <!-- Add Task -->
   <div class="max-w-3xl mx-auto mt-6 flex">

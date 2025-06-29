@@ -38,6 +38,7 @@ function renderTasks() {
   const list = document.getElementById('taskList');
   list.innerHTML = '';
   const active = tasks[currentTab];
+
   ['todo', 'completed', 'archived'].forEach(type => {
     document.getElementById(`count${capitalize(type)}`).textContent = tasks[type].length;
   });
@@ -46,14 +47,15 @@ function renderTasks() {
     const card = document.createElement('div');
     card.className = 'bg-gray-700 p-4 rounded shadow-md';
     card.innerHTML = `
-      <p>${task.text}</p>
+      <p class="text-white">${task.text}</p>
       <small class="block text-gray-300">Last modified: ${task.timestamp}</small>
-      <div class="mt-2 space-x-2">
+      <div class="mt-2 flex gap-4 flex-wrap text-sm">
         ${getButtons(currentTab, i)}
       </div>`;
     list.appendChild(card);
   });
-    // Calculate progress
+
+  // Progress bar update
   const total = tasks.todo.length + tasks.completed.length;
   const done = tasks.completed.length;
   const percent = total === 0 ? 0 : Math.round((done / total) * 100);
@@ -63,16 +65,24 @@ function renderTasks() {
 }
 
 function getButtons(type, i) {
+  const btnBase = "text-sm px-3 py-1 rounded shadow flex items-center gap-1";
+
+  let buttons = '';
+
   if (type === 'todo') {
-    return `<button onclick="move('todo','completed',${i})" class="bg-green-500 px-2 py-1 rounded">✅</button>
-            <button onclick="move('todo','archived',${i})" class="bg-yellow-500 px-2 py-1 rounded">📦</button>`;
+    buttons += `<button onclick="move('todo','completed',${i})" class="${btnBase} bg-green-600 text-white hover:bg-green-700">✔️ Mark as completed</button>`;
+    buttons += `<button onclick="move('todo','archived',${i})" class="${btnBase} bg-white text-black hover:bg-gray-200">📦 Archive</button>`;
+  } else if (type === 'completed') {
+    buttons += `<button onclick="move('completed','todo',${i})" class="${btnBase} bg-blue-600 text-white hover:bg-blue-700">↩️ Move to Todo</button>`;
+    buttons += `<button onclick="move('completed','archived',${i})" class="${btnBase} bg-white text-black hover:bg-gray-200">📦 Archive</button>`;
+  } else if (type === 'archived') {
+    buttons += `<button onclick="move('archived','todo',${i})" class="${btnBase} bg-blue-600 text-white hover:bg-blue-700">↩️ Move to Todo</button>`;
+    buttons += `<button onclick="move('archived','completed',${i})" class="${btnBase} bg-green-600 text-white hover:bg-green-700">✔️ Mark as completed</button>`;
   }
-  if (type === 'completed') {
-    return `<button onclick="move('completed','todo',${i})" class="bg-blue-500 px-2 py-1 rounded">↩️</button>
-            <button onclick="move('completed','archived',${i})" class="bg-yellow-500 px-2 py-1 rounded">📦</button>`;
-  }
-  return `<button onclick="move('archived','todo',${i})" class="bg-blue-500 px-2 py-1 rounded">↩️</button>
-          <button onclick="move('archived','completed',${i})" class="bg-green-500 px-2 py-1 rounded">✅</button>`;
+
+  buttons += `<button onclick="deleteTask('${type}', ${i})" class="${btnBase} bg-red-600 text-white hover:bg-red-700">🗑️ Delete</button>`;
+
+  return `<div class="flex gap-2 mt-2 flex-wrap">${buttons}</div>`;
 }
 
 function move(from, to, i) {
@@ -80,6 +90,12 @@ function move(from, to, i) {
   t.timestamp = new Date().toLocaleString();
   tasks[to].push(t);
   tasks[from].splice(i, 1);
+  saveTasks();
+  renderTasks();
+}
+
+function deleteTask(type, index) {
+  tasks[type].splice(index, 1);
   saveTasks();
   renderTasks();
 }
