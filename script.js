@@ -45,13 +45,17 @@ function renderTasks() {
 
   active.forEach((task, i) => {
     const card = document.createElement('div');
-    card.className = 'bg-gray-700 p-4 rounded shadow-md';
+    card.className = 'relative bg-gray-700 p-4 rounded shadow-md';
+
     card.innerHTML = `
+      <button onclick="deleteTask('${currentTab}', ${i})"
+              class="absolute top-2 right-2 text-white hover:text-red-400 text-lg leading-none font-bold"
+              title="Delete this task">×</button>
+
       <p class="text-white">${task.text}</p>
-      <small class="block text-gray-300">Last modified: ${task.timestamp}</small>
-      <div class="mt-2 flex gap-4 flex-wrap text-sm">
-        ${getButtons(currentTab, i)}
-      </div>`;
+      <small class="block text-gray-300 mt-1">Last modified: ${task.timestamp}</small>
+      ${getButtons(currentTab, i)}
+    `;
     list.appendChild(card);
   });
 
@@ -80,9 +84,7 @@ function getButtons(type, i) {
     buttons += `<button onclick="move('archived','completed',${i})" class="${btnBase} bg-green-600 text-white hover:bg-green-700">✔️ Mark as completed</button>`;
   }
 
-  buttons += `<button onclick="deleteTask('${type}', ${i})" class="${btnBase} bg-red-600 text-white hover:bg-red-700">🗑️ Delete</button>`;
-
-  return `<div class="flex gap-2 mt-2 flex-wrap">${buttons}</div>`;
+  return `<div class="flex gap-2 mt-3 flex-wrap">${buttons}</div>`;
 }
 
 function move(from, to, i) {
