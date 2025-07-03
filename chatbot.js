@@ -48,6 +48,7 @@ function speak(text) {
 
 function respondToMessage(msg) {
   let response = "";
+  msg = msg.toLowerCase().trim();
 
   if (msg.startsWith("add ")) {
     const task = msg.substring(4).trim();
@@ -59,21 +60,40 @@ function respondToMessage(msg) {
     } else {
       response = "Please specify a longer task.";
     }
+
+  } else if (msg.startsWith("delete ") || msg.startsWith("remove ")) {
+    const toDelete = msg.replace(/^(delete|remove)\s+/i, "").trim();
+    const index = tasks.todo.findIndex(t => t.text.toLowerCase() === toDelete);
+
+    if (index !== -1) {
+      const removed = tasks.todo.splice(index, 1);
+      saveTasks();
+      renderTasks();
+      response = `Task "${removed[0].text}" deleted from your todo list.`;
+    } else {
+      response = `I couldn't find a task called "${toDelete}".`;
+    }
+
   } else if (msg.includes("hello") || msg.includes("hi")) {
     response = "Hi there! How can I help you today?";
+
   } else if (msg.includes("how are you")) {
     response = "I'm just a bot, but I'm ready to help!";
+
   } else if (msg.includes("what can you do")) {
-    response = "I can add tasks, show your tasks, and remind you. Just ask!";
+    response = "I can add tasks, delete tasks, show your tasks, and remind you. Just ask!";
+
   } else if (msg.includes("show") && msg.includes("task")) {
     response = `You have ${tasks.todo.length} tasks in Todo, ${tasks.completed.length} completed, and ${tasks.archived.length} archived.`;
+
   } else {
-    response = "I'm not sure what you meant. Try saying 'Add buy milk' or 'Show my tasks'.";
+    response = "I'm not sure what you meant. Try saying 'Add buy milk' or 'Delete buy milk'.";
   }
 
   showBotMsg(response);
   speak(response);
 }
+
 
 function startVoiceInput() {
   if (!recognition) {
